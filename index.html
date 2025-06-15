@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Soil Color Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Logo -->
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+
+        <!-- App Title -->
+        <h1>Soil Color Analyzer</h1>
+
+        <!-- Upload Form -->
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="image" accept="image/*" required>
+            <button type="submit">Analyze</button>
+        </form>
+
+        <!-- Prediction Result -->
+        {% if result %}
+        <div class="result">
+            <h2>Prediction:</h2>
+            <p>{{ result|safe }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

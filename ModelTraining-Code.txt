@@ -1,0 +1,37 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import LabelEncoder
+import joblib
+import os
+
+# Load dataset
+df = pd.read_csv("data/processed/soil_color_features.csv")
+
+X = df.drop(columns=["soil_type", "fertility_class"])
+y = df["soil_type"]
+
+# Encode soil type
+le_soil = LabelEncoder()
+y_encoded = le_soil.fit_transform(y)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2, random_state=42)
+
+clf = RandomForestClassifier(n_estimators=100, random_state=42)
+clf.fit(X_train, y_train)
+
+# Save model and label encoder
+os.makedirs("models", exist_ok=True)
+joblib.dump(clf, "models/soil_type_model.pkl")
+joblib.dump(le_soil, "models/soil_label_encoder.pkl")
+
+# Save fertility mapping dictionary
+fertility_map = {
+    "Alluvial soil": "Rich",
+    "Black Soil": "Moderate",
+    "Clay soil": "Poor",
+    "Red soil": "Moderate"
+}
+joblib.dump(fertility_map, "models/fertility_map.pkl")
+
+print("✅ Model and encoders saved.")
