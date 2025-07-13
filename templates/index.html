@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Soil Image Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <img src="{{ url_for('static', filename='logo.png') }}" class="logo" alt="Logo">
+
+        <h1>Soil Image Analyzer (from Google Drive)</h1>
+
+        <form method="POST">
+            <label>Enter Google Drive Folder ID:</label>
+            <input type="text" name="folder_id" required>
+            <button type="submit">Analyze</button>
+        </form>
+
+        {% if results %}
+            <div class="result">
+                <h2>Analysis Results</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image Name</th>
+                            <th>Soil Type</th>
+                            <th>Condition</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in results %}
+                        <tr>
+                            <td>{{ r.filename }}</td>
+                            <td>{{ r.soil_type }}</td>
+                            <td>{{ r.condition }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="summary">
+                    <h3>Summary</h3>
+                    <div class="summary-boxes">
+                        <div>
+                            <h4>Soil Types</h4>
+                            <ul>
+                                {% for type, count in summary.soil_counts.items() %}
+                                <li>{{ type }}: {{ count }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Conditions</h4>
+                            <ul>
+                                {% for cond, count in summary.condition_counts.items() %}
+                                <li>{{ cond }}: {{ count }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="download-btn-container">
+                    <a href="/download_report">
+                        <button>Download Report</button>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
