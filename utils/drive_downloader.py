@@ -1,10 +1,13 @@
+import os
+import io
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-import io, os
 from googleapiclient.http import MediaIoBaseDownload
 
 SCOPES = ['https://www.googleapis.com/auth/drive']
-SERVICE_ACCOUNT_FILE = 'credentials/service_account.json'
+
+# ✅ Read path from environment variable (set in Render as secret)
+SERVICE_ACCOUNT_FILE = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 
 def download_images_from_drive(folder_id, download_path):
     credentials = service_account.Credentials.from_service_account_file(
@@ -28,4 +31,5 @@ def download_images_from_drive(folder_id, download_path):
             while not done:
                 _, done = downloader.next_chunk()
         downloaded_files.append(file_path)
+
     return downloaded_files
