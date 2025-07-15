@@ -1,12 +1,13 @@
 services:
   - type: web
     name: soil-analyzer
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    runtime: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
+    pythonVersion: 3.10.13
     envVars:
       - key: GOOGLE_APPLICATION_CREDENTIALS
-        value: /etc/secrets/service_account.json
-    secrets:
-      - source: service_account_json
-        target: /etc/secrets/service_account.json
+        value: /etc/secrets/service_account
+    secretFiles:
+      - name: service_account
+        path: /etc/secrets/service_account
